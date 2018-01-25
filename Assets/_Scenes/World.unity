@@ -145,11 +145,11 @@ MonoBehaviour:
   Width: 100
   Height: 100
   NoiseScale: 25
-  Octaves: 4
+  Octaves: 3
   Persistance: 0.5
   Lacunarity: 2
-  Offset: {x: 0, y: 0}
-  Seed: 1132443045
+  Offset: {x: 18.92, y: 3.97}
+  Seed: 1114209346
   UseRandomSeed: 1
   AutoUpdate: 1
   Regions:
