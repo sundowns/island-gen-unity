@@ -27,7 +27,7 @@ namespace Assets._Scripts
         public bool UseRandomSeed;
         public bool AutoUpdate;
 
-        public TerrainTypes[] Regions;
+        public Terrain[] Regions;
 
         public void GenerateMap ()
         {
@@ -92,9 +92,8 @@ namespace Assets._Scripts
 
         }
     }
-
     [System.Serializable]
-    public struct TerrainTypes
+    public struct Terrain
     {
         public string Name;
         public float Height;
