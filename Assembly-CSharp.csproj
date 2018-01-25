@@ -55,6 +55,7 @@
      <Compile Include="Assets\_Scripts\MapDisplay.cs" />
      <Compile Include="Assets\_Scripts\MapGenerator.cs" />
      <Compile Include="Assets\_Scripts\Noise.cs" />
+     <Compile Include="Assets\_Scripts\TextureGenerator.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Tools/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
