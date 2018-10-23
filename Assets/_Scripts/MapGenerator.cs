@@ -12,11 +12,16 @@ namespace Assets._Scripts
             ColourMap,
             Mesh
         }
-
         public DrawingMode DrawMode;
 
-        public int Width;
-        public int Height;
+        /*
+        Must be <255. 241 is nice because 240 is divisible by all even numbers up to 12, allowing us to smoothly
+        reduce vertices based on distance for performance.  
+        */ 
+        const int mapChunkSize = 241; 
+        [Range(0,6)]
+        public int levelOfDetail;
+
         public float NoiseScale;
         public int Octaves;
         [Range(0,1)]
@@ -29,6 +34,9 @@ namespace Assets._Scripts
         public bool AutoUpdate;
 
         public Terrain[] Regions;
+        [Range(0.1f, 1000)]
+        public float meshHeightMultiplier;
+        public AnimationCurve meshHeightCurve;
 
         public void GenerateMap ()
         {
@@ -37,20 +45,20 @@ namespace Assets._Scripts
                 Seed = Time.time.GetHashCode();
             }
 
-            float[,] noiseMap = Noise.GenerateNoiseMap(Width, Height, Seed, NoiseScale, Octaves, Persistance, Lacunarity, Offset);
+            float[,] noiseMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, Seed, NoiseScale, Octaves, Persistance, Lacunarity, Offset);
 
-            Color[] colourMap = new Color[Width*Height];
+            Color[] colourMap = new Color[mapChunkSize*mapChunkSize];
 
-            for (int y = 0; y < Height; y++)
+            for (int y = 0; y < mapChunkSize; y++)
             {
-                for (int x = 0; x < Width; x++)
+                for (int x = 0; x < mapChunkSize; x++)
                 {
                     float currentHeight = noiseMap[x, y];
                     for (int i = 0; i < Regions.Length; i++) //loop through regions, assigning the correct type based on height!
                     {
                         if (currentHeight <= Regions[i].Height)
                         {
-                            colourMap[y * Width + x] = Regions[i].Colour;
+                            colourMap[y * mapChunkSize + x] = Regions[i].Colour;
                             break;
                         }
                     }
@@ -64,25 +72,15 @@ namespace Assets._Scripts
             }
             else if (DrawMode == DrawingMode.ColourMap)
             {
-                display.DrawTexture(TextureGenerator.TextureFromColourMap(colourMap, Width, Height));
+                display.DrawTexture(TextureGenerator.TextureFromColourMap(colourMap, mapChunkSize, mapChunkSize));
             } else if (DrawMode == DrawingMode.Mesh) {
-                display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap), TextureGenerator.TextureFromColourMap(colourMap, Width, Height));
+                display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier, meshHeightCurve, levelOfDetail), TextureGenerator.TextureFromColourMap(colourMap, mapChunkSize, mapChunkSize));
             }
             
         }
 
         void OnValidate()
         {
-            if (Width < 1)
-            {
-                Width = 1;
-            }
-
-            if (Height < 1)
-            {
-                Height = 1;
-            }
-
             if (Lacunarity < 1)
             {
                 Lacunarity = 1;
