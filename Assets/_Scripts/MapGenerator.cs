@@ -9,7 +9,8 @@ namespace Assets._Scripts
         public enum DrawingMode
         {
             NoiseMap,
-            ColourMap
+            ColourMap,
+            Mesh
         }
 
         public DrawingMode DrawMode;
@@ -64,6 +65,8 @@ namespace Assets._Scripts
             else if (DrawMode == DrawingMode.ColourMap)
             {
                 display.DrawTexture(TextureGenerator.TextureFromColourMap(colourMap, Width, Height));
+            } else if (DrawMode == DrawingMode.Mesh) {
+                display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap), TextureGenerator.TextureFromColourMap(colourMap, Width, Height));
             }
             
         }
